@@ -85,7 +85,11 @@ void handle_accept(socket_ptr sock,
 	if (!ec) {
 		char data[1024];
 		memset(data, 0, 1024);
-		size_t len = sock->read_some(buffer(data,1024));
+		boost::system::error_code err;
+		size_t len = sock->read_some(buffer(data,1024),err);
+		if(err){
+			cout<<err.message()<<endl;
+		}
 		cout<<"len : "<<len<<endl;
 		printf("%s\n", data);
 		write(*sock, buffer("ok", 2));
